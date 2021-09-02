@@ -1,4 +1,5 @@
-import List from '../renderData/List';
+import List from "../renderData/List";
+import {useState,useEffect} from 'react';
 const DUMMY_DATA = [
   {
     id: "1",
@@ -19,19 +20,54 @@ const DUMMY_DATA = [
   {
     id: "3",
     title: "iran",
-    imgurl:"https://www.bing.com/th?id=OTG.DD300A9E631A0D85A78AE9D183C3D4E7&w=1246&h=400&c=8&rs=1&o=6&pid=TravelL2&eid=G.861698700",
-    description: "Spain (Spanish: España, [esˈpaɲa] (About this soundlisten)), formally the Kingdom of Spain[13] (Spanish: Reino de España),[a][b] is a country in Southwestern Europe with some pockets of territory in the Mediterranean Sea, offshore in the Atlantic Ocean and across the Strait of Gibraltar.[13] Its continental European territory is situated on the Iberian Peninsula, and its insular territory includes the Balearic Islands in the Mediterranean Sea, several small islands in the Alboran Sea and the Canary Islands in the Atlantic Ocean. The Spanish territory also includes the African semi-exclaves of Ceuta, Melilla and Peñon de Vélez across the Strait of Gibraltar.[14][h] The country's mainland is bordered to the south and east by the Mediterranean Sea; to the north by France, Andorra and the Bay of Biscay; and to the west by Portugal and the Atlantic Ocean.",
+    imgurl:
+      "https://www.bing.com/th?id=OTG.DD300A9E631A0D85A78AE9D183C3D4E7&w=1246&h=400&c=8&rs=1&o=6&pid=TravelL2&eid=G.861698700",
+    description:
+      "Spain (Spanish: España, [esˈpaɲa] (About this soundlisten)), formally the Kingdom of Spain[13] (Spanish: Reino de España),[a][b] is a country in Southwestern Europe with some pockets of territory in the Mediterranean Sea, offshore in the Atlantic Ocean and across the Strait of Gibraltar.[13] Its continental European territory is situated on the Iberian Peninsula, and its insular territory includes the Balearic Islands in the Mediterranean Sea, several small islands in the Alboran Sea and the Canary Islands in the Atlantic Ocean. The Spanish territory also includes the African semi-exclaves of Ceuta, Melilla and Peñon de Vélez across the Strait of Gibraltar.[14][h] The country's mainland is bordered to the south and east by the Mediterranean Sea; to the north by France, Andorra and the Bay of Biscay; and to the west by Portugal and the Atlantic Ocean.",
   },
 ];
 
 function Home() {
-  return (
-        <section>
-            <h1>Home</h1>
-            <List meetup={DUMMY_DATA}/> 
-        </section>
+  const [isLoading,setIsLoading]=useState(false);
+  const [loadedMeetups,setLoadedMeetups]=useState([]);
+  useEffect(()=>{
+    setIsLoading(true);
+    fetch("https://data1-f780.restdb.io/rest/gallery",{
+      headers: {
+        "x-apikey": "61262cce43cedb6d1f97e8ea",
+        "cache-control": "no-cache",
+        "content-type": "application/json",
+      },
+    })
+    .then((response) =>{
+      return response.json;
+    }) 
+    .then((data)=> {
+      const meetups=[];
+
+      for(const key in data){
+        const meetup={
+          id:key,
+          ...data[key]
+        };
+        meetups.push(meetup)
+      }
+      setIsLoading(false);
+      setLoadedMeetups(meetups);
+    });
+  },[])
+ 
+  if(isLoading){
+    return(
+      <h1>LOADING ...</h1>
     )
-  ;
+  }
+  return (
+    <section>
+      <h1>Home</h1>
+      <List meetups={DUMMY_DATA} />
+    </section>
+  );
 }
 
 export default Home;
