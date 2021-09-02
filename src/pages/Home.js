@@ -2,7 +2,7 @@ import List from "../renderData/List";
 import {useState,useEffect} from 'react';
 
 function Home() {
-  const [isLoading,setIsLoading]=useState(false);
+  const [isLoading,setIsLoading]=useState(true);
   const [loadedMeetups,setLoadedMeetups]=useState([]);
   useEffect(()=>{
     setIsLoading(true);
@@ -16,7 +16,7 @@ function Home() {
     .then((response) =>{
       return response.json;
     }) 
-    .then((data)=> {
+    .then((data) => {
       const meetups=[];
 
       for(const key in data){
@@ -29,7 +29,7 @@ function Home() {
       setIsLoading(false);
       setLoadedMeetups(meetups);
     });
-  },[])
+  },[]);
  
   if(isLoading){
     return(
