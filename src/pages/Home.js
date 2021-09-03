@@ -14,7 +14,7 @@ function Home() {
       },
     })
     .then((response) =>{
-      return response.json;
+      return response.json();
     }) 
     .then((data) => {
       const meetups=[];
@@ -25,12 +25,12 @@ function Home() {
           ...data[key]
         };
         meetups.push(meetup)
-      }
+      };
       setIsLoading(false);
       setLoadedMeetups(meetups);
     });
   },[]);
- 
+  console.log(loadedMeetups);
   if(isLoading){
     return(
       <h1>LOADING ...</h1>

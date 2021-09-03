@@ -3,11 +3,11 @@ import Render from "./Render";
 function List(props) {
   return (
     <ul className={classes.ul}>
-      {props.meetup.map((meetup) => (
+      {props.meetups.map((meetup) => (
         <Render
           key={meetup.id}
-          id={meetup.id}
-          imgurl={meetup.imgurl}
+          name={meetup.name}
+          image={meetup.image}
           description={meetup.description}
         />
       ))}
